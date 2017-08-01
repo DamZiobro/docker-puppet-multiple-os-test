@@ -9,8 +9,8 @@ function renderDockerfiles() {
 
     #echo "Rendering files in dir: $dir"
 
-    if [ ! -f $dir/DOCKERFILE.template -o ! -f $dir/VERSIONS ]; then
-      echo -e "\n\n ERROR!!!! Cannot find file $dir/DOCKERFILE.template or $dir/VERSIONS !!!"
+    if [ ! -f $dir/DOCKERFILE.template -o ! -f VERSIONS ]; then
+      echo -e "\n\n ERROR!!!! Cannot find file $dir/DOCKERFILE.template or VERSIONS !!!"
       return 1
     fi
 
@@ -18,6 +18,12 @@ function renderDockerfiles() {
     rm -rf $dir/Dockerfile*
 
     while read version; do 
+      os=$(echo $version | cut -d: -f1)
+      currdir=$(echo $dir | cut -d'/' -f2)
+      #echo "os: $os; currdir: $currdir"
+      if [ ${version:0:1} == "#" -o $os != $currdir ]; then
+        continue
+      fi
       echo "Rendering file in dir '$dir' for docker image version '$version'"  
 
       suffix=$(echo "$version" | tr '[A-Z]' '[a-z]' | tr '[:.]' '[\-\-]')
@@ -27,7 +33,7 @@ function renderDockerfiles() {
       sed -i "s/\%\%FROM_IMAGE\%\%/$version/g" $dir/Dockerfile.$suffix 
       sed -i "s/\%\%VERSION_NR\%\%/$version_nr/g" $dir/Dockerfile.$suffix 
 
-    done < $dir/VERSIONS
+    done < VERSIONS
 
   done
 
