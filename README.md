@@ -1,4 +1,4 @@
-Docker + Puppet integration skeleton  (test you app on multiple OSes using docker images and containers)
+Docker + Puppet integration skeleton  (test your app on multiple OSes using docker images and containers)
 =====
 
 This Docker+Puppet integration skeleton allows you to test your application or puppet manifest on multiple
